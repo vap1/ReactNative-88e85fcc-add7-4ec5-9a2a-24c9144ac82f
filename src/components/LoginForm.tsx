@@ -7,11 +7,12 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    console.log('Logging in...');
+    console.log('Step 1: User enters email and password');
     console.log('Email:', email);
     console.log('Password:', password);
 
-    // Perform API call for user login here
+    // Perform login API call here
+    console.log('Step 2: User submits login form');
 
     // Example API call using fetch:
     fetch('/api/login', {
@@ -39,6 +40,8 @@ const LoginForm = () => {
         // Handle error here
       });
   };
+
+  console.log('LoginForm initialized');
 
   return (
     <View>
