@@ -15,7 +15,7 @@ export const AuthContext = createContext<AuthContextProps>({
   logout: () => {},
 });
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserLoginResponse | null>(null);
 
   const login = async (request: UserLoginRequest) => {
@@ -43,7 +43,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user:any, login:any, logout:any }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
