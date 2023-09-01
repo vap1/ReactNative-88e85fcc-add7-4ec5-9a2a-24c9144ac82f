@@ -5,32 +5,14 @@ import { AdminContext } from '../contexts/AdminContext';
 import { User } from '../types/Types';
 
 const AdminUserList: React.FC = () => {
-  const { users, fetchAdminUserDetails, loading, error } = useContext(AdminContext);
+  const { users, getUsers } = useContext(AdminContext);
 
   useEffect(() => {
     console.log('Fetching admin user details...');
-    fetchAdminUserDetails();
+    getUsers();
   }, []);
 
   console.log('Rendering admin user list...');
-
-  if (loading) {
-    console.log('Loading admin user details...');
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    console.log('Error fetching admin user details:', error);
-    return (
-      <View>
-        <Text>Error: {error}</Text>
-      </View>
-    );
-  }
 
   return (
     <View>
