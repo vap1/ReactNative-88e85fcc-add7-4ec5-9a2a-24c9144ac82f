@@ -5,11 +5,11 @@ import { AdminContext } from '../contexts/AdminContext';
 import { User } from '../types/Types';
 
 const AdminUserDetailsScreen: React.FC = () => {
-  const { users, getUsers } = useContext(AdminContext);
+  const { users, fetchAdminUserDetails } = useContext(AdminContext);
 
   useEffect(() => {
     console.log('Fetching admin user details...');
-    getUsers();
+    fetchAdminUserDetails();
   }, []);
 
   console.log('Rendering admin user details screen...');
