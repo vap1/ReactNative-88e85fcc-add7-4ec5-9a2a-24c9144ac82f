@@ -24,6 +24,8 @@ const ProfileForm: React.FC = () => {
     updateUserProfile(profileData);
   };
 
+  console.log('ProfileForm initialized');
+
   return (
     <View>
       <TextInput
