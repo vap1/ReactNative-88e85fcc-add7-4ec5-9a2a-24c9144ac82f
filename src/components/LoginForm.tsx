@@ -1,57 +1,53 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, Alert } from 'react-native';
+import { LoginFormData, loginUser } from '../apis/AuthApi';
 
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const LoginForm: React.FC = () => {
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: '',
+    password: '',
+  });
 
-  const handleLogin = () => {
+  const handleInputChange = (key: keyof LoginFormData, value: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [key]: value,
+    }));
+  };
+
+  const handleLogin = async () => {
     console.log('Logging in...');
-    console.log('Email:', email);
-    console.log('Password:', password);
-
-    // Perform API call for user login here
-
-    // Example API call using fetch:
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Login response:', data);
-
-        // Handle login success or failure here
-        if (data.success) {
-          console.log('Login successful!');
-          // Redirect to the Profile Screen or perform any other necessary actions
-        } else {
-          console.log('Login failed:', data.message);
-          // Display error message to the user or perform any other necessary actions
-        }
-      })
-      .catch((error) => {
-        console.log('Login error:', error);
-        // Handle error here
+    try {
+      // Call the loginUser API to authenticate the user
+      const user = await loginUser(formData);
+      console.log('User logged in successfully:', user);
+      // Show success message to the user
+      Alert.alert('Login successful', 'You have successfully logged in!');
+      // Reset the form data
+      setFormData({
+        email: '',
+        password: '',
       });
+    } catch (error) {
+      console.error('Error logging in:', error);
+      // Show error message to the user
+      Alert.alert('Login failed', 'Invalid email or password. Please try again.');
+    }
   };
 
   return (
     <View>
       <TextInput
         placeholder="Email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
+        value={formData.email}
+        onChangeText={(value) => handleInputChange('email', value)}
       />
       <TextInput
         placeholder="Password"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
         secureTextEntry
+        value={formData.password}
+        onChangeText={(value) => handleInputChange('password', value)}
       />
       <Button title="Login" onPress={handleLogin} />
     </View>
