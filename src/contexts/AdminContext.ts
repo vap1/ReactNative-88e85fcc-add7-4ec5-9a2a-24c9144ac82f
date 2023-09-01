@@ -51,7 +51,7 @@ export const AdminContextProvider: React.FC = ({ children }) => {
   console.log('AdminContextProvider initialized');
 
   return (
-    <AdminContext.Provider value={{ users, loading, error, fetchAdminUserDetails }}>
+    <AdminContext.Provider value={{ users: [] as User[], loading: boolean, error: string, fetchAdminUserDetails: AdminUserDetailsResponse }}>
       {children}
     </AdminContext.Provider>
   );
