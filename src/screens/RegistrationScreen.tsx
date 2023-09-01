@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { RegistrationFormData, registerUser, validateEmail } from '../apis/AuthApi';
+import { View, TextInput, Button } from 'react-native';
+import { RegistrationFormData, registerUser } from '../apis/AuthApi';
 
 const RegistrationScreen: React.FC = () => {
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -18,22 +18,13 @@ const RegistrationScreen: React.FC = () => {
   };
 
   const handleRegister = async () => {
-    console.log('Registering user...');
-
-    // Validate email
-    if (!validateEmail(formData.email)) {
-      console.log('Invalid email');
-      Alert.alert('Invalid email', 'Please enter a valid email address');
-      return;
-    }
+    console.log('Registering user:', formData);
 
     try {
       // Call the registerUser API to register the user
-      const newUser = await registerUser(formData);
-      console.log('User registered successfully:', newUser);
+      const registeredUser = await registerUser(formData);
 
-      // Show success message to the user
-      Alert.alert('Registration successful', 'You have successfully registered!');
+      console.log('Registered user:', registeredUser);
 
       // Reset the form data
       setFormData({
@@ -42,10 +33,7 @@ const RegistrationScreen: React.FC = () => {
         password: '',
       });
     } catch (error) {
-      console.error('Error registering user:', error);
-
-      // Show error message to the user
-      Alert.alert('Registration failed', 'An error occurred while registering. Please try again later.');
+      console.log('Error registering user:', error);
     }
   };
 
@@ -63,9 +51,9 @@ const RegistrationScreen: React.FC = () => {
       />
       <TextInput
         placeholder="Password"
-        secureTextEntry
         value={formData.password}
         onChangeText={(value) => handleInputChange('password', value)}
+        secureTextEntry
       />
       <Button title="Register" onPress={handleRegister} />
     </View>
