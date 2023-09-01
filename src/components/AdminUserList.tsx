@@ -4,14 +4,12 @@ import { View, Text } from 'react-native';
 import { AdminContext } from '../contexts/AdminContext';
 
 const AdminUserList: React.FC = () => {
-  const { users, fetchAllUsers } = useContext(AdminContext);
+  const { users, fetchAllUserDetails } = useContext(AdminContext);
 
   useEffect(() => {
-    console.log('Fetching all users...');
-    fetchAllUsers();
+    console.log('Fetching all user details for admin');
+    fetchAllUserDetails();
   }, []);
-
-  console.log('Rendering AdminUserList component...');
 
   return (
     <View>
@@ -20,8 +18,16 @@ const AdminUserList: React.FC = () => {
         <View key={user.id}>
           <Text>Name: {user.name}</Text>
           <Text>Email: {user.email}</Text>
+          <Text>Profile Picture: {user.profilePicture}</Text>
+          <Text>Contact Info:</Text>
           <Text>Phone: {user.contactInfo.phone}</Text>
-          <Text>Address: {user.address.street}, {user.address.city}, {user.address.state}, {user.address.country}, {user.address.zipCode}</Text>
+          <Text>Email: {user.contactInfo.email}</Text>
+          <Text>Address:</Text>
+          <Text>Street: {user.address.street}</Text>
+          <Text>City: {user.address.city}</Text>
+          <Text>State: {user.address.state}</Text>
+          <Text>Country: {user.address.country}</Text>
+          <Text>Zip Code: {user.address.zipCode}</Text>
         </View>
       ))}
     </View>
