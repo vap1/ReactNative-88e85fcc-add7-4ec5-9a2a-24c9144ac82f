@@ -1,41 +1,35 @@
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { View, Text } from 'react-native';
+import { UserProfileRequest, UserProfileResponse } from '../types/Types';
 import { ProfileContext } from '../contexts/ProfileContext';
-import { User } from '../types/Types';
-import { fetchUserDetails } from '../apis/UserApi';
 
 const ProfileScreen: React.FC = () => {
-  const { user, updateProfile } = useContext(ProfileContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const { userProfile, fetchUserProfile } = useContext(ProfileContext);
 
   useEffect(() => {
-    const getUserDetails = async () => {
-      try {
-        setIsLoading(true);
-        const userDetails = await fetchUserDetails(user?.id || '');
-        updateProfile(userDetails);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-        setIsLoading(false);
-      }
+    console.log('Fetching user profile...');
+    const token = 'user_token'; // Replace with actual user token
+    const request: UserProfileRequest = {
+      token: token,
     };
-
-    getUserDetails();
+    fetchUserProfile(request)
+      .then((response: UserProfileResponse) => {
+        console.log('User profile fetched successfully:', response.user);
+      })
+      .catch((error: Error) => {
+        console.log('Error fetching user profile:', error.message);
+      });
   }, []);
 
   return (
     <View>
-      {isLoading ? (
-        <Text>Loading user details...</Text>
-      ) : (
-        <View>
-          <Text>Name: {user?.name}</Text>
-          <Text>Email: {user?.email}</Text>
-          {/* Add more user details if needed */}
-        </View>
-      )}
+      <Text>User Profile:</Text>
+      <Text>Name: {userProfile?.name}</Text>
+      <Text>Email: {userProfile?.email}</Text>
+      <Text>Contact Info: {userProfile?.contactInfo}</Text>
+      <Text>Address: {userProfile?.address}</Text>
+      <Text>Profile Picture: {userProfile?.profilePicture}</Text>
     </View>
   );
 };
