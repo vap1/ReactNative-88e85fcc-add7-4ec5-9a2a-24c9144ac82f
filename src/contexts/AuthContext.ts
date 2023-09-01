@@ -1,6 +1,6 @@
 
 import React, { createContext, useState } from 'react';
-import { User, LoginFormData, RegistrationFormData, ProfileFormData, validateEmail, encryptPassword, decryptPassword, fetchUserDetails } from '../types/Types';
+import { User, LoginFormData, RegistrationFormData, ProfileFormData, validateEmail, encryptPassword, decryptPassword, login, updateProfile, fetchAllUserDetails } from '../types/Types';
 
 // Create the AuthContext
 export const AuthContext = createContext<{
@@ -8,100 +8,125 @@ export const AuthContext = createContext<{
   login: (formData: LoginFormData) => void;
   register: (formData: RegistrationFormData) => void;
   logout: () => void;
-  updateProfile: (formData: ProfileFormData) => void;
+  updateProfile: (profileData: ProfileFormData) => void;
+  fetchAllUserDetails: () => void;
 }>({
   user: null,
   login: () => {},
   register: () => {},
   logout: () => {},
   updateProfile: () => {},
+  fetchAllUserDetails: () => {},
 });
 
-// AuthProvider component
+// Create the AuthProvider component
 export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // Login function
-  const login = (formData: LoginFormData) => {
-    console.log('Logging in...');
-    // Add logic to authenticate user credentials using backend API
-    // Set the user state if authentication is successful
-    setUser({
-      id: '1',
-      name: 'John Doe',
-      email: formData.email,
-      password: encryptPassword(formData.password),
-      profilePicture: 'profilePictureUrl',
-      contactInfo: {
-        phone: '1234567890',
-        email: formData.email,
-      },
-      address: {
-        street: '123 Main St',
-        city: 'New York',
-        state: 'NY',
-        country: 'USA',
-        zipCode: '12345',
-      },
-    });
-    console.log('Login successful!');
+  // Function to handle user login
+  const handleLogin = (formData: LoginFormData) => {
+    const { email, password } = formData;
+    console.log(`Logging in user with email: ${email}`);
+
+    // Add login logic here
+    const isLoggedIn = login(email, password);
+
+    if (isLoggedIn) {
+      // Set the user in the state
+      setUser({
+        id: '1',
+        name: 'John Doe',
+        email: email,
+        password: password,
+        profilePicture: '',
+        contactInfo: { phone: '', email: '' },
+        address: { street: '', city: '', state: '', country: '', zipCode: '' },
+      });
+    } else {
+      console.log('Login failed');
+    }
   };
 
-  // Register function
-  const register = (formData: RegistrationFormData) => {
-    console.log('Registering user...');
-    // Add logic to create a new user account using backend API
-    // Set the user state if registration is successful
-    setUser({
+  // Function to handle user registration
+  const handleRegister = (formData: RegistrationFormData) => {
+    const { name, email, password } = formData;
+    console.log(`Registering user with name: ${name}, email: ${email}`);
+
+    // Add registration logic here
+
+    // Validate email
+    const isEmailValid = validateEmail(email);
+    if (!isEmailValid) {
+      console.log('Invalid email');
+      return;
+    }
+
+    // Encrypt password
+    const encryptedPassword = encryptPassword(password);
+
+    // Create a new user object
+    const newUser: User = {
       id: '1',
-      name: formData.name,
-      email: formData.email,
-      password: encryptPassword(formData.password),
-      profilePicture: 'profilePictureUrl',
-      contactInfo: {
-        phone: '1234567890',
-        email: formData.email,
-      },
-      address: {
-        street: '123 Main St',
-        city: 'New York',
-        state: 'NY',
-        country: 'USA',
-        zipCode: '12345',
-      },
-    });
-    console.log('Registration successful!');
+      name: name,
+      email: email,
+      password: encryptedPassword,
+      profilePicture: '',
+      contactInfo: { phone: '', email: '' },
+      address: { street: '', city: '', state: '', country: '', zipCode: '' },
+    };
+
+    // Set the user in the state
+    setUser(newUser);
   };
 
-  // Logout function
-  const logout = () => {
-    console.log('Logging out...');
-    // Clear the user state
+  // Function to handle user logout
+  const handleLogout = () => {
+    console.log('Logging out user');
     setUser(null);
-    console.log('Logout successful!');
   };
 
-  // Update profile function
-  const updateProfile = (formData: ProfileFormData) => {
-    console.log('Updating profile...');
-    // Add logic to update user profile using backend API
-    // Update the user state with the new profile data
-    setUser((prevUser) => {
-      if (prevUser) {
-        return {
-          ...prevUser,
-          name: formData.name,
-          contactInfo: formData.contactInfo,
-          address: formData.address,
-        };
-      }
-      return null;
-    });
-    console.log('Profile updated successfully!');
+  // Function to handle profile update
+  const handleUpdateProfile = (profileData: ProfileFormData) => {
+    const { name, contactInfo, address, profilePicture } = profileData;
+    console.log(`Updating profile for user with ID: ${user?.id}`);
+    console.log(`New profile data: ${JSON.stringify(profileData)}`);
+
+    // Add profile update logic here
+
+    // Update the user object with new profile data
+    const updatedUser: User = {
+      ...user!,
+      name: name,
+      contactInfo: contactInfo,
+      address: address,
+      profilePicture: profilePicture,
+    };
+
+    // Set the updated user in the state
+    setUser(updatedUser);
+  };
+
+  // Function to fetch all user details for admin
+  const handleFetchAllUserDetails = () => {
+    console.log('Fetching all user details for admin');
+
+    // Add logic to fetch all user details here
+    const allUserDetails = fetchAllUserDetails();
+
+    console.log('All user details:', allUserDetails);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, updateProfile }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login: handleLogin,
+        register: handleRegister,
+        logout: handleLogout,
+        updateProfile: handleUpdateProfile,
+        fetchAllUserDetails: handleFetchAllUserDetails,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
