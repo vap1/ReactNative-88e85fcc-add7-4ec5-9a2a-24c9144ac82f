@@ -12,13 +12,10 @@ const LoginScreen = () => {
     console.log('Password:', password);
 
     // Perform login API call here
-    console.log('Performing login API call...');
+    // Add appropriate API call and context usage
 
-    // Assuming the API call is successful
     console.log('Step 2: User submits login form');
   };
-
-  console.log('Rendering login screen...');
 
   return (
     <View>
