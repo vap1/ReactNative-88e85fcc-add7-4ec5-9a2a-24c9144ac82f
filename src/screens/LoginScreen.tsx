@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
+import { View, TextInput, Button } from 'react-native';
 import { LoginFormData, loginUser } from '../apis/AuthApi';
 
 const LoginScreen: React.FC = () => {
@@ -17,15 +17,13 @@ const LoginScreen: React.FC = () => {
   };
 
   const handleLogin = async () => {
-    console.log('Logging in...');
+    console.log('Logging in user:', formData);
 
     try {
-      // Call the loginUser API to authenticate the user
-      const user = await loginUser(formData);
-      console.log('User logged in successfully:', user);
+      // Call the loginUser API to log in the user
+      const loggedInUser = await loginUser(formData);
 
-      // Show success message to the user
-      Alert.alert('Login successful', 'You have successfully logged in!');
+      console.log('Logged in user:', loggedInUser);
 
       // Reset the form data
       setFormData({
@@ -33,10 +31,7 @@ const LoginScreen: React.FC = () => {
         password: '',
       });
     } catch (error) {
-      console.error('Error logging in:', error);
-
-      // Show error message to the user
-      Alert.alert('Login failed', 'Invalid email or password. Please try again.');
+      console.log('Error logging in user:', error);
     }
   };
 
@@ -49,9 +44,9 @@ const LoginScreen: React.FC = () => {
       />
       <TextInput
         placeholder="Password"
-        secureTextEntry
         value={formData.password}
         onChangeText={(value) => handleInputChange('password', value)}
+        secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
     </View>
