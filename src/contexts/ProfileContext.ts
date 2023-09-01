@@ -19,7 +19,7 @@ export const ProfileContext = createContext<ProfileContextProps>({
   updateProfile: () => {},
 });
 
-export const ProfileContextProvider: React.FC = ({ children }) => {
+export const ProfileProvider: React.FC = ({ children }) => {
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
