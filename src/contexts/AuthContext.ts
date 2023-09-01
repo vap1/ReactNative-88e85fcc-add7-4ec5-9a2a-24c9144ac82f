@@ -15,7 +15,7 @@ export const AuthContext = createContext<AuthContextProps>({
   logout: () => {},
 });
 
-export const AuthContextProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserLoginResponse | null>(null);
 
   const login = async (request: UserLoginRequest) => {
@@ -41,6 +41,8 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     setUser(null);
     console.log('User logged out successfully.');
   };
+
+  console.log('AuthContext initialized');
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
