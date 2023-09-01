@@ -7,18 +7,38 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    console.log('Step 1: User enters email and password');
+    console.log('Logging in...');
     console.log('Email:', email);
     console.log('Password:', password);
 
-    // Perform login API call here
-    console.log('Performing login API call...');
+    // Perform API call for user login here
 
-    // Assuming the API call is successful
-    console.log('Step 2: User submits login form');
+    // Example API call using fetch:
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Login response:', data);
+
+        // Handle login success or failure here
+        if (data.success) {
+          console.log('Login successful!');
+          // Redirect to the Profile Screen or perform any other necessary actions
+        } else {
+          console.log('Login failed:', data.message);
+          // Display error message to the user or perform any other necessary actions
+        }
+      })
+      .catch((error) => {
+        console.log('Login error:', error);
+        // Handle error here
+      });
   };
-
-  console.log('Rendering login screen...');
 
   return (
     <View>
