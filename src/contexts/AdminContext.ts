@@ -1,55 +1,32 @@
 
-import React, { createContext, useState, useEffect } from 'react';
-import { AdminUserDetailsRequest, AdminUserDetailsResponse, User } from '../types/Types';
-import { getAdminUserDetails } from '../apis/AdminApi';
+import React, { createContext, useState } from 'react';
+import { User, fetchAllUserDetails } from '../types/Types';
 
-interface AdminContextProps {
+// Create the AdminContext
+export const AdminContext = createContext<{
   users: User[];
-  loading: boolean;
-  error: string | null;
-  fetchAdminUserDetails: () => void;
-}
-
-export const AdminContext = createContext<AdminContextProps>({
+  fetchAllUsers: () => void;
+}>({
   users: [],
-  loading: false,
-  error: null,
-  fetchAdminUserDetails: () => {},
+  fetchAllUsers: () => {},
 });
 
+// AdminProvider component
 export const AdminProvider: React.FC = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchAdminUserDetails = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Fetching admin user details...');
-
-      const request: AdminUserDetailsRequest = {
-        token: 'YOUR_ADMIN_TOKEN',
-      };
-
-      const response: AdminUserDetailsResponse = await getAdminUserDetails(request);
-      console.log('Admin user details fetched successfully:', response);
-
-      setUsers(response.users);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching admin user details:', error);
-      setError('Failed to fetch admin user details');
-      setLoading(false);
-    }
+  // Fetch all users function
+  const fetchAllUsers = () => {
+    console.log('Fetching all users...');
+    // Add logic to fetch all user details using backend API
+    const allUsers = fetchAllUserDetails();
+    // Set the users state with the fetched user details
+    setUsers(allUsers);
+    console.log('Users fetched successfully!');
   };
 
-  useEffect(() => {
-    fetchAdminUserDetails();
-  }, []);
-
   return (
-    <AdminContext.Provider value={{ users, loading, error, fetchAdminUserDetails }}>
+    <AdminContext.Provider value={{ users, fetchAllUsers }}>
       {children}
     </AdminContext.Provider>
   );
