@@ -13,21 +13,23 @@ const Stack = createStackNavigator();
 const AppNavigator: React.FC = () => {
   const { user } = useContext(AuthContext);
 
-  console.log('Rendering AppNavigator component...');
+  console.log('User:', user);
 
   return (
     <NavigationContainer>
-      {user ? (
-        <Stack.Navigator>
-          <Stack.Screen name="Profile" component={ProfileScreen} />
-          <Stack.Screen name="AdminUserDetails" component={AdminUserDetailsScreen} />
-        </Stack.Navigator>
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Registration" component={RegistrationScreen} />
-        </Stack.Navigator>
-      )}
+      <Stack.Navigator>
+        {user ? (
+          <>
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="AdminUserDetails" component={AdminUserDetailsScreen} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Registration" component={RegistrationScreen} />
+          </>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
