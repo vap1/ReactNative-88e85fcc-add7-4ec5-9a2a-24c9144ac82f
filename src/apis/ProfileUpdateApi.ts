@@ -7,7 +7,12 @@ export const updateProfile = async (request: UserProfileUpdateRequest): Promise<
     console.log('Request:', request);
 
     // Simulating API call and generating random data
-    const updatedProfile = generateRandomProfile();
+    const updatedProfile = {
+      name: 'John Doe',
+      contactInfo: 'john.doe@example.com',
+      address: '123 Main St',
+      profilePicture: 'https://example.com/profile.jpg',
+    };
 
     console.log('Updated profile:', updatedProfile);
 
@@ -23,14 +28,3 @@ export const updateProfile = async (request: UserProfileUpdateRequest): Promise<
     };
   }
 };
-
-// Helper function to generate random profile data
-const generateRandomProfile = (): UserProfileUpdateResponse => {
-  // Generate random profile data here
-  return {
-    success: true,
-    message: 'User profile updated successfully',
-  };
-};
-
-console.log('ProfileUpdateApi.ts loaded successfully');
