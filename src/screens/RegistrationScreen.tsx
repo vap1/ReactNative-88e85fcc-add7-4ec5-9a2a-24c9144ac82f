@@ -14,7 +14,6 @@ const RegistrationScreen = () => {
     console.log('Password:', password);
 
     // Perform API call for user registration here
-    console.log('Performing user registration API call...');
 
     // Assuming the API call is successful
     console.log('Registration successful');
