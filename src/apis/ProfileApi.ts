@@ -1,5 +1,5 @@
 
-import { UserProfileRequest, UserProfileResponse } from '../types/Types';
+import { UserProfileRequest, UserProfileResponse, User } from '../types/Types';
 
 export const getUserProfile = async (request: UserProfileRequest): Promise<UserProfileResponse> => {
   try {
@@ -7,13 +7,7 @@ export const getUserProfile = async (request: UserProfileRequest): Promise<UserP
     console.log('Request:', request);
 
     // Simulating API call and generating random data
-    const userProfile = {
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      contactInfo: '1234567890',
-      address: '123 Main St',
-      profilePicture: 'https://example.com/profile.jpg',
-    };
+    const userProfile: User = generateRandomUserProfile();
 
     console.log('Received getUserProfile API response...');
     console.log('Response:', userProfile);
@@ -23,4 +17,16 @@ export const getUserProfile = async (request: UserProfileRequest): Promise<UserP
     console.error('Error in getUserProfile API:', error);
     throw error;
   }
+};
+
+// Helper function to generate random user profile
+const generateRandomUserProfile = (): User => {
+  // Generate random user profile data here
+  return {
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    contactInfo: '1234567890',
+    address: '123 Main St',
+    profilePicture: 'https://example.com/profile.jpg',
+  };
 };
