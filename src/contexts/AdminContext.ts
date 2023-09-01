@@ -17,7 +17,7 @@ export const AdminContext = createContext<AdminContextProps>({
   fetchAdminUserDetails: () => {},
 });
 
-export const AdminContextProvider: React.FC = ({ children }) => {
+export const AdminProvider: React.FC = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,13 +45,12 @@ export const AdminContextProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('Admin context initialized');
     fetchAdminUserDetails();
   }, []);
 
-  console.log('AdminContextProvider initialized');
-
   return (
-    <AdminContext.Provider value={{ users: [] as User[], loading: boolean, error: string, fetchAdminUserDetails: AdminUserDetailsResponse }}>
+    <AdminContext.Provider value={{ users, loading, error, fetchAdminUserDetails }}>
       {children}
     </AdminContext.Provider>
   );
