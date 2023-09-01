@@ -16,8 +16,6 @@ const App = () => {
     // Additional initialization logic can be added here
   }, []);
 
-  console.log('Initializing App Navigator');
-
   return (
     <NavigationContainer>
       <AuthContextProvider>
