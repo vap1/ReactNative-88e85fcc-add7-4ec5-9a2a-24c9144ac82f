@@ -1,26 +1,22 @@
 
-import { UserProfileRequest, UserProfileResponse } from '../types/Types';
+import { User, ProfileFormData } from '../types/Types';
 
-export const getUserProfile = async (request: UserProfileRequest): Promise<UserProfileResponse> => {
-  try {
-    console.log('Sending getUserProfile API request...');
-    console.log('Request:', request);
-
-    // Simulating API call and generating random data
-    const userProfile = {
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      contactInfo: '1234567890',
-      address: '123 Main St',
-      profilePicture: 'https://example.com/profile.jpg',
-    };
-
-    console.log('Received getUserProfile API response...');
-    console.log('Response:', userProfile);
-
-    return { user: userProfile };
-  } catch (error) {
-    console.error('Error in getUserProfile API:', error);
-    throw error;
-  }
+// Function to update user profile
+export const updateUserProfile = async (formData: ProfileFormData): Promise<User> => {
+  console.log('Updating user profile...');
+  
+  // Add logic to update user profile using backend API
+  // Generate random user data for demonstration purposes
+  const updatedUser: User = {
+    id: '1',
+    name: formData.name,
+    email: 'johndoe@example.com',
+    password: 'encryptedPassword',
+    profilePicture: 'profilePictureUrl',
+    contactInfo: formData.contactInfo,
+    address: formData.address,
+  };
+  
+  console.log('User profile updated successfully!');
+  return updatedUser;
 };
