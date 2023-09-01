@@ -1,27 +1,36 @@
 
-import { User, ProfileFormData } from '../types/Types';
+import { UserProfileUpdateRequest, UserProfileUpdateResponse } from '../types/Types';
 
-// Function to update user profile
-export const updateUserProfile = async (userId: string, formData: ProfileFormData): Promise<User> => {
-  console.log('Updating user profile:', formData);
+export const updateProfile = async (request: UserProfileUpdateRequest): Promise<UserProfileUpdateResponse> => {
+  try {
+    console.log('Updating user profile...');
+    console.log('Request:', request);
 
-  // Add logic to update user profile with backend API
-  // Replace the following code with actual API call
+    // Simulating API call and generating random data
+    const updatedProfile = generateRandomProfile();
 
-  // Generate random profile picture URL
-  const profilePictureUrl = `https://example.com/profiles/${userId}.jpg`;
+    console.log('Updated profile:', updatedProfile);
 
-  // Create an updated user object
-  const updatedUser: User = {
-    id: userId,
-    name: formData.name,
-    email: '',
-    password: '',
-    profilePicture: profilePictureUrl,
-    contactInfo: formData.contactInfo,
-    address: formData.address,
-  };
-
-  console.log('Updated user profile:', updatedUser);
-  return updatedUser;
+    return {
+      success: true,
+      message: 'User profile updated successfully',
+    };
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    return {
+      success: false,
+      message: 'Failed to update user profile',
+    };
+  }
 };
+
+// Helper function to generate random profile data
+const generateRandomProfile = (): UserProfileUpdateResponse => {
+  // Generate random profile data here
+  return {
+    success: true,
+    message: 'User profile updated successfully',
+  };
+};
+
+console.log('ProfileUpdateApi.ts loaded successfully');
