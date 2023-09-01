@@ -17,7 +17,7 @@ export const AdminContext = createContext<AdminContextProps>({
   fetchAdminUserDetails: () => {},
 });
 
-export const AdminProvider: React.FC = ({ children }) => {
+export const AdminContextProvider: React.FC = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
