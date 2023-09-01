@@ -1,84 +1,49 @@
 
 import React, { createContext, useState } from 'react';
-import { User, RegistrationFormData, LoginFormData } from '../types/Types';
+import { UserLoginRequest, UserLoginResponse } from '../types/Types';
+import { loginUser } from '../apis/AuthApi';
 
-// Create the AuthContext
-export const AuthContext = createContext<{
-  user: User | null;
-  register: (formData: RegistrationFormData) => void;
-  login: (formData: LoginFormData) => void;
+interface AuthContextProps {
+  user: UserLoginResponse | null;
+  login: (request: UserLoginRequest) => void;
   logout: () => void;
-}>({
+}
+
+export const AuthContext = createContext<AuthContextProps>({
   user: null,
-  register: () => {},
   login: () => {},
   logout: () => {},
 });
 
-// Create the AuthProvider component
 export const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserLoginResponse | null>(null);
 
-  // Function to handle user registration
-  const register = (formData: RegistrationFormData) => {
-    console.log('Registering user:', formData);
-    // Add logic to register user with backend API
-    // Set the user state after successful registration
-    setUser({
-      id: '1',
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      profilePicture: '',
-      contactInfo: {
-        phone: '',
-        email: formData.email,
-      },
-      address: {
-        street: '',
-        city: '',
-        state: '',
-        country: '',
-        zipCode: '',
-      },
-    });
+  const login = async (request: UserLoginRequest) => {
+    try {
+      console.log('Step 1: Initiating login process...');
+      console.log('Request:', request);
+
+      // Make API call to login user
+      const response = await loginUser(request);
+      console.log('Step 2: Login API call successful. Response:', response);
+
+      // Update user state
+      setUser(response);
+      console.log('Step 3: User login successful. User:', response);
+    } catch (error) {
+      console.error('Error occurred during login:', error);
+    }
   };
 
-  // Function to handle user login
-  const login = (formData: LoginFormData) => {
-    console.log('Logging in user:', formData);
-    // Add logic to authenticate user with backend API
-    // Set the user state after successful login
-    setUser({
-      id: '1',
-      name: 'John Doe',
-      email: formData.email,
-      password: 'encryptedPassword',
-      profilePicture: 'profilePictureUrl',
-      contactInfo: {
-        phone: '1234567890',
-        email: formData.email,
-      },
-      address: {
-        street: '123 Main St',
-        city: 'New York',
-        state: 'NY',
-        country: 'USA',
-        zipCode: '12345',
-      },
-    });
-  };
-
-  // Function to handle user logout
   const logout = () => {
-    console.log('Logging out user');
-    // Add logic to logout user from backend API
-    // Clear the user state
+    console.log('Logging out user...');
+    // Clear user state
     setUser(null);
+    console.log('User logged out successfully.');
   };
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
