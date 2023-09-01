@@ -1,41 +1,61 @@
 
 import React, { createContext, useState } from 'react';
-import { User, ProfileFormData, fetchUserDetails } from '../types/Types';
+import { User, ProfileFormData, updateProfile, fetchAllUserDetails } from '../types/Types';
 
 // Create the ProfileContext
 export const ProfileContext = createContext<{
   user: User | null;
-  updateUserProfile: (formData: ProfileFormData) => void;
+  updateProfile: (profileData: ProfileFormData) => void;
+  fetchAllUserDetails: () => void;
 }>({
   user: null,
-  updateUserProfile: () => {},
+  updateProfile: () => {},
+  fetchAllUserDetails: () => {},
 });
 
-// ProfileProvider component
+// Create the ProfileProvider component
 export const ProfileProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // Update user profile function
-  const updateUserProfile = (formData: ProfileFormData) => {
-    console.log('Updating user profile...');
-    // Add logic to update user profile using backend API
-    // Update the user state with the new profile data
-    setUser((prevUser) => {
-      if (prevUser) {
-        return {
-          ...prevUser,
-          name: formData.name,
-          contactInfo: formData.contactInfo,
-          address: formData.address,
-        };
-      }
-      return null;
-    });
-    console.log('User profile updated successfully!');
+  // Function to handle profile update
+  const handleUpdateProfile = (profileData: ProfileFormData) => {
+    const { name, contactInfo, address, profilePicture } = profileData;
+    console.log(`Updating profile for user with ID: ${user?.id}`);
+    console.log(`New profile data: ${JSON.stringify(profileData)}`);
+
+    // Add profile update logic here
+
+    // Update the user object with new profile data
+    const updatedUser: User = {
+      ...(user as User),
+      name: name,
+      contactInfo: contactInfo,
+      address: address,
+      profilePicture: profilePicture,
+    };
+
+    // Set the updated user in the state
+    setUser(updatedUser);
+  };
+
+  // Function to fetch all user details for admin
+  const handleFetchAllUserDetails = () => {
+    console.log('Fetching all user details for admin');
+
+    // Add logic to fetch all user details here
+    const allUserDetails = fetchAllUserDetails();
+
+    console.log('All user details:', allUserDetails);
   };
 
   return (
-    <ProfileContext.Provider value={{ user, updateUserProfile }}>
+    <ProfileContext.Provider
+      value={{
+        user,
+        updateProfile: handleUpdateProfile,
+        fetchAllUserDetails: handleFetchAllUserDetails,
+      }}
+    >
       {children}
     </ProfileContext.Provider>
   );
