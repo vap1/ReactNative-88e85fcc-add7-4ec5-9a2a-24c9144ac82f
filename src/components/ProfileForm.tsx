@@ -1,16 +1,16 @@
 
 import React, { useContext, useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { ProfileFormData, User } from '../types/Types';
+import { View, TextInput, Button } from 'react-native';
 import { ProfileContext } from '../contexts/ProfileContext';
-import { updateUserProfile } from '../apis/ProfileApi';
+import { ProfileFormData } from '../types/Types';
 
 const ProfileForm: React.FC = () => {
-  const { user, updateUserProfile } = useContext(ProfileContext);
+  const { user, updateProfile } = useContext(ProfileContext);
   const [formData, setFormData] = useState<ProfileFormData>({
     name: user?.name || '',
     contactInfo: user?.contactInfo || { phone: '', email: '' },
     address: user?.address || { street: '', city: '', state: '', country: '', zipCode: '' },
+    profilePicture: user?.profilePicture || '',
   });
 
   const handleInputChange = (key: keyof ProfileFormData, value: string) => {
@@ -20,18 +20,16 @@ const ProfileForm: React.FC = () => {
     }));
   };
 
-  const handleUpdateProfile = async () => {
-    console.log('Updating user profile...');
+  const handleUpdateProfile = () => {
+    console.log('Updating profile:', formData);
+
     try {
-      // Call the updateUserProfile API to update the user profile
-      const updatedUser: User = await updateUserProfile(formData);
-      console.log('User profile updated successfully:', updatedUser);
-      // Show success message to the user
-      Alert.alert('Profile updated', 'Your profile has been updated successfully!');
+      // Call the updateProfile function from the ProfileContext to update the user profile
+      updateProfile(formData);
+
+      console.log('Profile updated successfully');
     } catch (error) {
-      console.error('Error updating user profile:', error);
-      // Show error message to the user
-      Alert.alert('Profile update failed', 'An error occurred while updating your profile. Please try again later.');
+      console.log('Error updating profile:', error);
     }
   };
 
@@ -76,6 +74,11 @@ const ProfileForm: React.FC = () => {
         placeholder="Zip Code"
         value={formData.address.zipCode}
         onChangeText={(value) => handleInputChange('address', { ...formData.address, zipCode: value })}
+      />
+      <TextInput
+        placeholder="Profile Picture"
+        value={formData.profilePicture}
+        onChangeText={(value) => handleInputChange('profilePicture', value)}
       />
       <Button title="Update Profile" onPress={handleUpdateProfile} />
     </View>
