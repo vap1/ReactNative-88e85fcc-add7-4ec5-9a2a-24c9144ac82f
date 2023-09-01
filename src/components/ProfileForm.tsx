@@ -1,8 +1,9 @@
 
 import React, { useContext, useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, Alert } from 'react-native';
+import { ProfileFormData, User } from '../types/Types';
 import { ProfileContext } from '../contexts/ProfileContext';
-import { ProfileFormData } from '../types/Types';
+import { updateUserProfile } from '../apis/ProfileApi';
 
 const ProfileForm: React.FC = () => {
   const { user, updateProfile } = useContext(ProfileContext);
@@ -10,7 +11,6 @@ const ProfileForm: React.FC = () => {
     name: user?.name || '',
     contactInfo: user?.contactInfo || { phone: '', email: '' },
     address: user?.address || { street: '', city: '', state: '', country: '', zipCode: '' },
-    profilePicture: user?.profilePicture || '',
   });
 
   const handleInputChange = (key: keyof ProfileFormData, value: string) => {
@@ -20,16 +20,22 @@ const ProfileForm: React.FC = () => {
     }));
   };
 
-  const handleUpdateProfile = () => {
-    console.log('Updating profile:', formData);
+  const handleSave = async () => {
+    console.log('Saving profile:', formData);
 
+    // Update user profile
     try {
-      // Call the updateProfile function from the ProfileContext to update the user profile
+      const updatedUser = await updateUserProfile(user?.id || '', formData);
+
+      console.log('Updated user profile:', updatedUser);
+
+      // Update profile context
       updateProfile(formData);
 
-      console.log('Profile updated successfully');
+      Alert.alert('Profile Saved', 'Your profile has been successfully saved!');
     } catch (error) {
-      console.log('Error updating profile:', error);
+      console.error('Error saving profile:', error);
+      Alert.alert('Profile Save Failed', 'An error occurred while saving your profile. Please try again later.');
     }
   };
 
@@ -75,12 +81,7 @@ const ProfileForm: React.FC = () => {
         value={formData.address.zipCode}
         onChangeText={(value) => handleInputChange('address', { ...formData.address, zipCode: value })}
       />
-      <TextInput
-        placeholder="Profile Picture"
-        value={formData.profilePicture}
-        onChangeText={(value) => handleInputChange('profilePicture', value)}
-      />
-      <Button title="Update Profile" onPress={handleUpdateProfile} />
+      <Button title="Save" onPress={handleSave} />
     </View>
   );
 };
