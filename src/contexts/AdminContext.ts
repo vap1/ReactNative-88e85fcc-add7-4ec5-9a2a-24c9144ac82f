@@ -1,32 +1,35 @@
 
-import React, { createContext, useState } from 'react';
+import React, { createContext } from 'react';
 import { User, fetchAllUserDetails } from '../types/Types';
 
 // Create the AdminContext
 export const AdminContext = createContext<{
   users: User[];
-  fetchAllUsers: () => void;
+  fetchAllUserDetails: () => void;
 }>({
   users: [],
-  fetchAllUsers: () => {},
+  fetchAllUserDetails: () => {},
 });
 
-// AdminProvider component
+// Create the AdminProvider component
 export const AdminProvider: React.FC = ({ children }) => {
-  const [users, setUsers] = useState<User[]>([]);
+  // Function to fetch all user details for admin
+  const handleFetchAllUserDetails = () => {
+    console.log('Fetching all user details for admin');
 
-  // Fetch all users function
-  const fetchAllUsers = () => {
-    console.log('Fetching all users...');
-    // Add logic to fetch all user details using backend API
-    const allUsers = fetchAllUserDetails();
-    // Set the users state with the fetched user details
-    setUsers(allUsers);
-    console.log('Users fetched successfully!');
+    // Add logic to fetch all user details here
+    const allUserDetails = fetchAllUserDetails();
+
+    console.log('All user details:', allUserDetails);
   };
 
   return (
-    <AdminContext.Provider value={{ users, fetchAllUsers }}>
+    <AdminContext.Provider
+      value={{
+        users: [],
+        fetchAllUserDetails: handleFetchAllUserDetails,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );
