@@ -8,15 +8,19 @@ const RegistrationForm = () => {
   const [password, setPassword] = useState('');
 
   const handleRegistration = () => {
-    console.log('Submitting registration form...');
+    console.log('Step 1: User visits the registration page');
     console.log('Name:', name);
     console.log('Email:', email);
     console.log('Password:', password);
 
     // Perform API call for user registration here
+    console.log('Step 2: User submits the registration form');
 
-    console.log('Registration form submitted successfully!');
+    // Assuming the API call is successful
+    console.log('Registration successful');
   };
+
+  console.log('RegistrationForm initialized');
 
   return (
     <View>
