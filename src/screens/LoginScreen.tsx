@@ -1,34 +1,57 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, Alert } from 'react-native';
+import { LoginFormData, loginUser } from '../apis/AuthApi';
 
-const LoginScreen = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const LoginScreen: React.FC = () => {
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: '',
+    password: '',
+  });
 
-  const handleLogin = () => {
-    console.log('Step 1: User enters email and password');
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleInputChange = (key: keyof LoginFormData, value: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [key]: value,
+    }));
+  };
 
-    // Perform login API call here
-    // Add appropriate API call and context usage
+  const handleLogin = async () => {
+    console.log('Logging in...');
 
-    console.log('Step 2: User submits login form');
+    try {
+      // Call the loginUser API to authenticate the user
+      const user = await loginUser(formData);
+      console.log('User logged in successfully:', user);
+
+      // Show success message to the user
+      Alert.alert('Login successful', 'You have successfully logged in!');
+
+      // Reset the form data
+      setFormData({
+        email: '',
+        password: '',
+      });
+    } catch (error) {
+      console.error('Error logging in:', error);
+
+      // Show error message to the user
+      Alert.alert('Login failed', 'Invalid email or password. Please try again.');
+    }
   };
 
   return (
     <View>
       <TextInput
         placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        value={formData.email}
+        onChangeText={(value) => handleInputChange('email', value)}
       />
       <TextInput
         placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
         secureTextEntry
+        value={formData.password}
+        onChangeText={(value) => handleInputChange('password', value)}
       />
       <Button title="Login" onPress={handleLogin} />
     </View>
