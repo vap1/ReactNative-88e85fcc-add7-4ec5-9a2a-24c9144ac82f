@@ -1,31 +1,22 @@
 
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
-import { AdminContext } from '../contexts/AdminContext';
+import { fetchAllUserDetails } from '../apis/AdminApi';
 import { User } from '../types/Types';
 
 const AdminUserDetailsScreen: React.FC = () => {
-  const { users, getUsers } = useContext(AdminContext);
-
   useEffect(() => {
-    console.log('Fetching admin user details...');
-    getUsers();
+    console.log('Fetching all user details for admin...');
+    const allUsers: User[] = fetchAllUserDetails();
+    console.log('All user details fetched successfully:', allUsers);
   }, []);
 
-  console.log('Rendering admin user details screen...');
+  console.log('Rendering AdminUserDetailsScreen component...');
 
   return (
     <View>
       <Text>Admin User Details</Text>
-      {users.map((user: User) => (
-        <View key={user.email}>
-          <Text>Name: {user.name}</Text>
-          <Text>Email: {user.email}</Text>
-          <Text>Contact Info: {user.contactInfo}</Text>
-          <Text>Address: {user.address}</Text>
-          <Text>Profile Picture: {user.profilePicture}</Text>
-        </View>
-      ))}
+      {/* Render user details here */}
     </View>
   );
 };
