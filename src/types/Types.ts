@@ -59,5 +59,3 @@ export interface AdminUserDetailsRequest {
 export interface AdminUserDetailsResponse {
   users: User[];
 }
-
-console.log('Types.ts loaded successfully');
