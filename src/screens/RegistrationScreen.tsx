@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
-import { RegistrationFormData, registerUser } from '../apis/AuthApi';
+import { View, TextInput, Button, Alert } from 'react-native';
+import { RegistrationFormData, validateEmail, encryptPassword } from '../types/Types';
+import { registerUser } from '../apis/AuthApi';
 
 const RegistrationScreen: React.FC = () => {
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -20,20 +21,38 @@ const RegistrationScreen: React.FC = () => {
   const handleRegister = async () => {
     console.log('Registering user:', formData);
 
+    // Validate email
+    const isEmailValid = validateEmail(formData.email);
+    if (!isEmailValid) {
+      console.log('Invalid Email');
+      Alert.alert('Invalid Email', 'Please enter a valid email address');
+      return;
+    }
+
+    // Encrypt password
+    const encryptedPassword = encryptPassword(formData.password);
+
+    // Register user
     try {
-      // Call the registerUser API to register the user
-      const registeredUser = await registerUser(formData);
+      const newUser = await registerUser({
+        name: formData.name,
+        email: formData.email,
+        password: encryptedPassword,
+      });
 
-      console.log('Registered user:', registeredUser);
+      console.log('Registered user:', newUser);
 
-      // Reset the form data
+      // Reset form data
       setFormData({
         name: '',
         email: '',
         password: '',
       });
+
+      Alert.alert('Registration Successful', 'You have successfully registered!');
     } catch (error) {
-      console.log('Error registering user:', error);
+      console.error('Error registering user:', error);
+      Alert.alert('Registration Failed', 'An error occurred while registering. Please try again later.');
     }
   };
 
@@ -51,9 +70,9 @@ const RegistrationScreen: React.FC = () => {
       />
       <TextInput
         placeholder="Password"
+        secureTextEntry
         value={formData.password}
         onChangeText={(value) => handleInputChange('password', value)}
-        secureTextEntry
       />
       <Button title="Register" onPress={handleRegister} />
     </View>
