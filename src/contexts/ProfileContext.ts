@@ -1,6 +1,6 @@
 
 import React, { createContext, useState, useEffect } from 'react';
-import { UserProfileRequest, UserProfileResponse, UserProfileUpdateRequest, UserProfileUpdateResponse } from '../types/Types';
+import { UserProfileRequest, UserProfileResponse, UserProfileUpdateRequest, UserProfileUpdateResponse, User } from '../types/Types';
 import { getProfile, updateProfile } from '../apis/ProfileApi';
 
 interface ProfileContextProps {
@@ -19,7 +19,7 @@ export const ProfileContext = createContext<ProfileContextProps>({
   updateProfile: () => {},
 });
 
-export const ProfileProvider: React.FC = ({ children }) => {
+export const ProfileContextProvider: React.FC = ({ children }) => {
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
