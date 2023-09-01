@@ -6,17 +6,14 @@ import { User } from '../types/Types';
 
 const AdminUserDetailsScreen: React.FC = () => {
   useEffect(() => {
-    console.log('Fetching all user details for admin...');
-    const allUsers: User[] = fetchAllUserDetails();
-    console.log('All user details fetched successfully:', allUsers);
+    console.log('Fetching all user details for admin');
+    const allUserDetails: User[] = fetchAllUserDetails();
+    console.log('All user details:', allUserDetails);
   }, []);
-
-  console.log('Rendering AdminUserDetailsScreen component...');
 
   return (
     <View>
       <Text>Admin User Details</Text>
-      {/* Render user details here */}
     </View>
   );
 };
