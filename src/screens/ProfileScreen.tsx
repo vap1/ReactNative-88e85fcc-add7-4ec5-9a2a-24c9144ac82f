@@ -5,15 +5,14 @@ import { UserProfileRequest, UserProfileResponse } from '../types/Types';
 import { ProfileContext } from '../contexts/ProfileContext';
 
 const ProfileScreen: React.FC = () => {
-  const { userProfile, fetchUserProfile } = useContext(ProfileContext);
+  const { userProfile, getUserProfile } = useContext(ProfileContext);
 
   useEffect(() => {
     console.log('Fetching user profile...');
-    const token = 'user_token'; // Replace with actual user token
     const request: UserProfileRequest = {
-      token: token,
+      token: 'user_token', // Replace with actual user token
     };
-    fetchUserProfile(request)
+    getUserProfile(request)
       .then((response: UserProfileResponse) => {
         console.log('User profile fetched successfully:', response.user);
       })
@@ -25,11 +24,11 @@ const ProfileScreen: React.FC = () => {
   return (
     <View>
       <Text>User Profile:</Text>
-      <Text>Name: {userProfile?.name}</Text>
-      <Text>Email: {userProfile?.email}</Text>
-      <Text>Contact Info: {userProfile?.contactInfo}</Text>
-      <Text>Address: {userProfile?.address}</Text>
-      <Text>Profile Picture: {userProfile?.profilePicture}</Text>
+      <Text>Name: {userProfile.name}</Text>
+      <Text>Email: {userProfile.email}</Text>
+      <Text>Contact Info: {userProfile.contactInfo}</Text>
+      <Text>Address: {userProfile.address}</Text>
+      <Text>Profile Picture: {userProfile.profilePicture}</Text>
     </View>
   );
 };
