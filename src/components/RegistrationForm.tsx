@@ -1,79 +1,44 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { RegistrationFormData, validateEmail, encryptPassword } from '../types/Types';
-import { registerUser } from '../apis/AuthApi';
+import { View, TextInput, Button } from 'react-native';
 
-const RegistrationForm: React.FC = () => {
-  const [formData, setFormData] = useState<RegistrationFormData>({
-    name: '',
-    email: '',
-    password: '',
-  });
+const RegistrationForm = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleInputChange = (key: keyof RegistrationFormData, value: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [key]: value,
-    }));
-  };
+  const handleRegistration = () => {
+    console.log('Step 1: User visits the registration page');
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Password:', password);
 
-  const handleRegister = async () => {
-    console.log('Registering user:', formData);
+    // Perform API call for user registration here
+    console.log('Step 2: User submits the registration form');
 
-    // Validate email
-    const isEmailValid = validateEmail(formData.email);
-    if (!isEmailValid) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address');
-      return;
-    }
-
-    // Encrypt password
-    const encryptedPassword = encryptPassword(formData.password);
-
-    // Register user
-    try {
-      const newUser = await registerUser({
-        name: formData.name,
-        email: formData.email,
-        password: encryptedPassword,
-      });
-
-      console.log('Registered user:', newUser);
-
-      // Reset form data
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-      });
-
-      Alert.alert('Registration Successful', 'You have successfully registered!');
-    } catch (error) {
-      console.error('Error registering user:', error);
-      Alert.alert('Registration Failed', 'An error occurred while registering. Please try again later.');
-    }
+    // Assuming the API call is successful
+    console.log('Registration successful');
   };
 
   return (
     <View>
       <TextInput
         placeholder="Name"
-        value={formData.name}
-        onChangeText={(value) => handleInputChange('name', value)}
+        value={name}
+        onChangeText={setName}
       />
       <TextInput
         placeholder="Email"
-        value={formData.email}
-        onChangeText={(value) => handleInputChange('email', value)}
+        value={email}
+        onChangeText={setEmail}
       />
       <TextInput
         placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
         secureTextEntry
-        value={formData.password}
-        onChangeText={(value) => handleInputChange('password', value)}
       />
-      <Button title="Register" onPress={handleRegister} />
+      <Button title="Register" onPress={handleRegistration} />
     </View>
   );
 };
