@@ -1,35 +1,47 @@
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { AdminContext } from '../contexts/AdminContext';
+import { User } from '../types/Types';
 
 const AdminUserList: React.FC = () => {
-  const { users, fetchAllUserDetails } = useContext(AdminContext);
+  const { users, fetchAllUsers } = useContext(AdminContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('Fetching all user details for admin');
-    fetchAllUserDetails();
+    const getUsers = async () => {
+      try {
+        setIsLoading(true);
+        await fetchAllUsers();
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        setIsLoading(false);
+      }
+    };
+
+    getUsers();
   }, []);
 
   return (
     <View>
-      <Text>Admin User List</Text>
-      {users.map((user) => (
-        <View key={user.id}>
-          <Text>Name: {user.name}</Text>
-          <Text>Email: {user.email}</Text>
-          <Text>Profile Picture: {user.profilePicture}</Text>
-          <Text>Contact Info:</Text>
-          <Text>Phone: {user.contactInfo.phone}</Text>
-          <Text>Email: {user.contactInfo.email}</Text>
-          <Text>Address:</Text>
-          <Text>Street: {user.address.street}</Text>
-          <Text>City: {user.address.city}</Text>
-          <Text>State: {user.address.state}</Text>
-          <Text>Country: {user.address.country}</Text>
-          <Text>Zip Code: {user.address.zipCode}</Text>
+      {isLoading ? (
+        <Text>Loading users...</Text>
+      ) : (
+        <View>
+          {users.length > 0 ? (
+            users.map((user: User) => (
+              <View key={user.id}>
+                <Text>Name: {user.name}</Text>
+                <Text>Email: {user.email}</Text>
+                {/* Add more user details if needed */}
+              </View>
+            ))
+          ) : (
+            <Text>No users found.</Text>
+          )}
         </View>
-      ))}
+      )}
     </View>
   );
 };
