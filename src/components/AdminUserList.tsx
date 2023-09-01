@@ -5,11 +5,11 @@ import { AdminContext } from '../contexts/AdminContext';
 import { User } from '../types/Types';
 
 const AdminUserList: React.FC = () => {
-  const { users, getUsers, loading, error } = useContext(AdminContext);
+  const { users, fetchAdminUserDetails, loading, error } = useContext(AdminContext);
 
   useEffect(() => {
     console.log('Fetching admin user details...');
-    getUsers();
+    fetchAdminUserDetails();
   }, []);
 
   console.log('Rendering admin user list...');
