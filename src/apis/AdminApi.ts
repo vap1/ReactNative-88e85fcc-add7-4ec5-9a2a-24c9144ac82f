@@ -24,3 +24,5 @@ const generateRandomUsers = (): User[] => {
     // Add more random user data as needed
   ];
 };
+
+console.log('AdminApi.ts initialized');
