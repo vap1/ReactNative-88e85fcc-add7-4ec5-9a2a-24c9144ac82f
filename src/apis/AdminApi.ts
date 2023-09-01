@@ -1,26 +1,34 @@
 
-import { AdminUserDetailsRequest, AdminUserDetailsResponse, User } from '../types/Types';
+import { User } from '../types/Types';
 
-export const getAdminUserDetails = async (request: AdminUserDetailsRequest): Promise<AdminUserDetailsResponse> => {
-  try {
-    console.log('Calling getAdminUserDetails API');
-    // Simulating API call and generating random data
-    const users: User[] = generateRandomUsers();
-
-    console.log('getAdminUserDetails API response:', users);
-    return { users };
-  } catch (error) {
-    console.error('Error in getAdminUserDetails API:', error);
-    throw error;
-  }
-};
-
-// Helper function to generate random user data
-const generateRandomUsers = (): User[] => {
-  // Generate random user data here
-  return [
-    { name: 'John Doe', email: 'johndoe@example.com' },
-    { name: 'Jane Smith', email: 'janesmith@example.com' },
-    // Add more random user data as needed
+// Function to fetch all user details for admin
+export const fetchAllUserDetails = (): User[] => {
+  console.log('Fetching all user details for admin');
+  
+  // Add logic to fetch all user details from backend API
+  // Generate random user data for demonstration purposes
+  const allUsers: User[] = [
+    {
+      id: '1',
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: 'encryptedPassword',
+      profilePicture: 'profilePictureUrl',
+      contactInfo: {
+        phone: '1234567890',
+        email: 'johndoe@example.com',
+      },
+      address: {
+        street: '123 Main St',
+        city: 'New York',
+        state: 'NY',
+        country: 'USA',
+        zipCode: '12345',
+      },
+    },
+    // Add more user details if needed
   ];
+
+  console.log('All user details fetched successfully!');
+  return allUsers;
 };
