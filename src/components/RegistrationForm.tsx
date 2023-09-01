@@ -20,6 +20,8 @@ const RegistrationForm = () => {
     console.log('Registration successful');
   };
 
+  console.log('Rendering registration form...');
+
   return (
     <View>
       <TextInput
