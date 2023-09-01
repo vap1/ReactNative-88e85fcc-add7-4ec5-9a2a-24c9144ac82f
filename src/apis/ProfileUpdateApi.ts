@@ -2,21 +2,23 @@
 import { User, ProfileFormData } from '../types/Types';
 
 // Function to update user profile
-export const updateUserProfile = async (formData: ProfileFormData): Promise<User> => {
-  console.log('Updating user profile...');
+export const updateProfile = async (userId: string, profileData: ProfileFormData): Promise<User> => {
+  console.log('Updating user profile:', profileData);
 
-  // Add logic to update user profile using backend API
-  // Generate random user data for demonstration purposes
+  // Add profile update logic here
+
+  // Generate a random user ID
   const updatedUser: User = {
-    id: '1',
-    name: formData.name,
-    email: 'johndoe@example.com',
-    password: 'encryptedPassword',
-    profilePicture: 'profilePictureUrl',
-    contactInfo: formData.contactInfo,
-    address: formData.address,
+    id: userId,
+    name: profileData.name,
+    email: '',
+    password: '',
+    profilePicture: profileData.profilePicture,
+    contactInfo: profileData.contactInfo,
+    address: profileData.address,
   };
 
-  console.log('User profile updated successfully!');
+  console.log('Updated user profile:', updatedUser);
+
   return updatedUser;
 };
