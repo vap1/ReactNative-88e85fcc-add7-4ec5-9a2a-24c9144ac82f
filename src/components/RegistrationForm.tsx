@@ -1,42 +1,68 @@
 
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, Alert } from 'react-native';
+import { RegistrationFormData, registerUser, validateEmail } from '../apis/AuthApi';
 
-const RegistrationForm = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const RegistrationForm: React.FC = () => {
+  const [formData, setFormData] = useState<RegistrationFormData>({
+    name: '',
+    email: '',
+    password: '',
+  });
 
-  const handleRegistration = () => {
-    console.log('Submitting registration form...');
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleInputChange = (key: keyof RegistrationFormData, value: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [key]: value,
+    }));
+  };
 
-    // Perform API call for user registration here
+  const handleRegister = async () => {
+    console.log('Registering user...');
+    // Validate email
+    if (!validateEmail(formData.email)) {
+      Alert.alert('Invalid email', 'Please enter a valid email address');
+      return;
+    }
 
-    console.log('Registration form submitted successfully!');
+    try {
+      // Call the registerUser API to register the user
+      const newUser = await registerUser(formData);
+      console.log('User registered successfully:', newUser);
+      // Show success message to the user
+      Alert.alert('Registration successful', 'You have successfully registered!');
+      // Reset the form data
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+      });
+    } catch (error) {
+      console.error('Error registering user:', error);
+      // Show error message to the user
+      Alert.alert('Registration failed', 'An error occurred while registering. Please try again later.');
+    }
   };
 
   return (
     <View>
       <TextInput
         placeholder="Name"
-        value={name}
-        onChangeText={setName}
+        value={formData.name}
+        onChangeText={(value) => handleInputChange('name', value)}
       />
       <TextInput
         placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        value={formData.email}
+        onChangeText={(value) => handleInputChange('email', value)}
       />
       <TextInput
         placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
         secureTextEntry
+        value={formData.password}
+        onChangeText={(value) => handleInputChange('password', value)}
       />
-      <Button title="Register" onPress={handleRegistration} />
+      <Button title="Register" onPress={handleRegister} />
     </View>
   );
 };
