@@ -1,50 +1,55 @@
 
-import React, { createContext, useState } from 'react';
-import { User } from '../types/Types';
+import React, { createContext, useState, useEffect } from 'react';
+import { AdminUserDetailsRequest, AdminUserDetailsResponse, User } from '../types/Types';
+import { getAdminUserDetails } from '../apis/AdminApi';
 
-// Create the AdminContext
-export const AdminContext = createContext<{
+interface AdminContextProps {
   users: User[];
-  fetchAllUsers: () => void;
-}>({
+  loading: boolean;
+  error: string | null;
+  fetchAdminUserDetails: () => void;
+}
+
+export const AdminContext = createContext<AdminContextProps>({
   users: [],
-  fetchAllUsers: () => {},
+  loading: false,
+  error: null,
+  fetchAdminUserDetails: () => {},
 });
 
-// Create the AdminProvider component
-export const AdminProvider: React.FC = ({ children }) => {
+export const AdminContextProvider: React.FC = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Function to fetch all user details
-  const fetchAllUsers = () => {
-    console.log('Fetching all user details');
-    // Add logic to fetch all user details from backend API
-    // Set the users state with the fetched data
-    setUsers([
-      {
-        id: '1',
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        password: 'encryptedPassword',
-        profilePicture: 'profilePictureUrl',
-        contactInfo: {
-          phone: '1234567890',
-          email: 'johndoe@example.com',
-        },
-        address: {
-          street: '123 Main St',
-          city: 'New York',
-          state: 'NY',
-          country: 'USA',
-          zipCode: '12345',
-        },
-      },
-      // Add more user details if needed
-    ]);
+  const fetchAdminUserDetails = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log('Fetching admin user details...');
+
+      const request: AdminUserDetailsRequest = {
+        token: 'YOUR_ADMIN_TOKEN',
+      };
+
+      const response: AdminUserDetailsResponse = await getAdminUserDetails(request);
+      console.log('Admin user details fetched successfully:', response);
+
+      setUsers(response.users);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching admin user details:', error);
+      setError('Failed to fetch admin user details');
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    fetchAdminUserDetails();
+  }, []);
+
   return (
-    <AdminContext.Provider value={{ users, fetchAllUsers }}>
+    <AdminContext.Provider value={{ users, loading, error, fetchAdminUserDetails }}>
       {children}
     </AdminContext.Provider>
   );
