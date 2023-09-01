@@ -12,8 +12,9 @@ const LoginForm = () => {
     console.log('Password:', password);
 
     // Perform login API call here
-    // Add appropriate API call and context usage
+    console.log('Performing login API call...');
 
+    // Assuming the API call is successful
     console.log('Step 2: User submits login form');
   };
 
